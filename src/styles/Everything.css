@@ -1,64 +1,126 @@
 /* General Layout */
 .everything {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-  }
-  
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 90%;
+  text-align: center;
+  color: white;
+}
+
+/* Editable JSON Styling */
+.json-editor {
+  text-align: left;
+  color: #fff;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap; /* Ensures text wraps to the next line */
+  line-height: 1.5;
+  word-break: break-word; /* Prevents long words from causing horizontal scrolling */
+  margin: 20px 0;
+  padding: 0;
+  border: none;
+  background: none;
+  resize: none;
+  overflow: auto;
+  outline: none;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Save Button Styling */
+.save-button {
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  margin-top: 20px; /* Ensure the button stays below the editor */
+  display: inline-block;
+}
+
+.save-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+}
+
+.error-message {
+  color: #ff4c4c;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+}
+
+/* Error and Loading States */
+.error, .loading {
+  font-size: 1.5rem;
+  color: #ff4c4c;
+  text-shadow: 0 0 10px #ff4c4c;
+}
+
+/* Background Video Styling */
+.everything video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Landscape Adjustments */
+@media (orientation: landscape) {
   .content {
-    position: relative;
-    z-index: 2;
-    max-width: 90%;
-    text-align: center;
-    color: white;
+    max-width: 60%; /* Adjust content width for better fit in landscape mode */
   }
-  
-  /* JSON Styling */
-  .json {
-    text-align: left;
-    color: #fff;
-    
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace;
-    white-space: pre-wrap; /* Ensures text wraps to the next line */
-    line-height: 1.5; /* Increases readability */
-    word-break: break-word; /* Prevents long words from causing horizontal scrolling */
-    margin: 10px 0;
+
+  .json-editor {
+    font-size: 1.2vw;
+    height: auto; /* Allow the editor to expand naturally */
+    max-height: 60vh; /* Prevent it from taking up too much space */
   }
-  
-  /* Error and Loading States */
-  .error, .loading {
-    font-size: 1.5rem;
-    color: #ff4c4c;
-    text-shadow: 0 0 10px #ff4c4c;
+
+  .save-button {
+    margin-top: 15px; /* Ensure spacing is appropriate below the editor */
+    align-self: center;
   }
-  
-  /* Background Video Styling */
-  .everything video {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-    pointer-events: none;
+}
+
+/* Portrait Adjustments */
+@media (orientation: portrait) {
+  .json-editor {
+    font-size: 3.5vw;
+    height: auto;
+    max-height: 50vh;
   }
-  
-  /* Responsive Adjustments */
-  @media (orientation: portrait) {
-    .json {
-        font-size: 4vw;
-    }
+
+  .save-button {
+    font-size: 4vw;
+    padding: 10px 20px;
   }
-  
-  @media (orientation: landscape) {
-    .json {
-        font-size: 1vw;
-    }
-  }
+}

@@ -10,7 +10,7 @@ const Everything = () => {
   const { name } = useParams();
   const { isAuthenticated, passwordEntered } = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
-  const [editableProfile, setEditableProfile] = useState(''); // Editable JSON content
+  const [editableProfile, setEditableProfile] = useState('');
   const [error, setError] = useState(null);
   const [message, setMessage] = useState('');
 
@@ -19,13 +19,14 @@ const Everything = () => {
     : null;
   const saveFileUrl = `https://starchart-988582688687.us-central1.run.app/editFile`;
 
+  // Fetch the JSON file from the backend
   useEffect(() => {
     if ((isAuthenticated || passwordEntered) && name) {
       const fetchProfile = async () => {
         try {
           const data = await fetchData(getFileUrl);
           setProfile(data);
-          setEditableProfile(JSON.stringify(data, null, 2)); // Format JSON for editing
+          setEditableProfile(JSON.stringify(data, null, 2));
           setError(null);
         } catch (err) {
           console.error('Error fetching profile:', err);
@@ -37,17 +38,34 @@ const Everything = () => {
     }
   }, [isAuthenticated, passwordEntered, name, getFileUrl]);
 
+  // Save changes back to the backend
   const handleSaveChanges = async () => {
     try {
-      // Validate JSON before sending to the server
       const updatedProfile = JSON.parse(editableProfile);
-
-      const edits = Object.keys(updatedProfile).map((key) => ({
-        action: 'edit',
-        key,
-        value: updatedProfile[key],
-      }));
-
+  
+      // Determine keys to remove by comparing the original and updated profiles
+      const originalKeys = Object.keys(profile);
+      const updatedKeys = Object.keys(updatedProfile);
+  
+      // Keys to remove are in the original profile but not in the updated profile
+      const keysToRemove = originalKeys.filter((key) => !updatedKeys.includes(key));
+  
+      // Prepare the edits array
+      const edits = [
+        ...Object.entries(updatedProfile).map(([key, value]) => ({
+          action: 'edit',
+          key,
+          value,
+        })),
+        ...keysToRemove.map((key) => ({
+          action: 'remove',
+          key,
+        })),
+      ];
+  
+      console.log('Request Payload:', { fileName: `${name}.json`, edits }); // Debug log
+  
+      // Send the data to the backend
       const response = await fetch(saveFileUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,9 +74,20 @@ const Everything = () => {
           edits,
         }),
       });
-
-      if (!response.ok) throw new Error('Failed to save changes');
-
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save changes: ${errorText}`);
+      }
+  
+      const responseData = await response.json();
+  
+      console.log('Response from Backend:', responseData); // Debug log
+  
+      if (responseData.error) {
+        throw new Error(responseData.error);
+      }
+  
       setProfile(updatedProfile); // Update local state
       setMessage('Changes saved successfully!');
       setError(null);
@@ -68,6 +97,8 @@ const Everything = () => {
       setMessage('');
     }
   };
+  
+  
 
   if (!isAuthenticated && !passwordEntered) {
     return <PasswordPrompt onAuthenticated={() => {}} />;

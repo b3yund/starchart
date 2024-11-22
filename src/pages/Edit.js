@@ -182,25 +182,7 @@ const Edit = () => {
         {!name ? (
           <>
             <h1>Edit Options</h1>
-            <div className="option">
-              <h2>Upload JSON File</h2>
-              <input
-                type="text"
-                placeholder="Enter file name"
-                value={uploadName}
-                onChange={(e) => setUploadName(e.target.value)}
-              />
-              <input
-                id="file-upload"
-                type="file"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="file-upload" className="file-upload-label">
-                Choose File
-              </label>
-              <button onClick={handleUploadFile}>Upload File</button>
-            </div>
-            <div className="option">
+            <div className="option"> 
               <h2>Add Key to All JSON Files</h2>
               <input
                 type="text"
@@ -282,3 +264,26 @@ const Edit = () => {
 };
 
 export default Edit;
+
+{/*
+  
+<div className="option">
+  <h2>Upload JSON File</h2>
+  <input
+    type="text"
+    placeholder="Enter file name"
+    value={uploadName}
+    onChange={(e) => setUploadName(e.target.value)}
+  />
+  <input
+    id="file-upload"
+    type="file"
+    onChange={handleFileChange}
+  />
+  <label htmlFor="file-upload" className="file-upload-label">
+    Choose File
+  </label>
+  <button onClick={handleUploadFile}>Upload File</button>
+</div>
+
+*/}
